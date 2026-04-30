@@ -227,15 +227,21 @@
               <a class="nav-link" href="tvshows.html">TV Shows</a>
             </li>
             <li class="nav-item">
+              <a class="nav-link" href="kdrama.html">K-Drama</a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link active" href="genres.html">Genres</a>
             </li>
           </ul>
           <div class="d-flex align-items-center gap-3 mt-3 mt-lg-0">
-            <input
-              type="text"
-              class="nav-search d-none d-lg-block"
-              placeholder="Search movies..."
-            />
+            <form id="searchForm" class="d-flex m-0">
+              <input
+                id="searchInput"
+                type="text"
+                class="nav-search d-none d-lg-block"
+                placeholder="Search movies..."
+              />
+            </form>
             <div class="nav-avatar">U</div>
           </div>
         </div>
@@ -451,5 +457,42 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // DOM = Mengakses HTML
+      const searchForm = document.getElementById("searchForm");
+      const searchInput = document.getElementById("searchInput");
+      const genreCards = document.querySelectorAll(".genre-card");
+
+      // Function = Menjalankan perintah
+      function handleSearch(event) {
+        // Event = Menangkap aksi user (submit)
+        event.preventDefault();
+
+        // Form handling = Mengatur input user
+        const query = searchInput.value.trim();
+        if (query === "") {
+          alert("Masukkan kata kunci pencarian terlebih dahulu!");
+        } else {
+          alert(`Mencari genre atau film dengan kata kunci: "${query}"`);
+          searchInput.value = ""; // Reset form
+        }
+      }
+
+      function handleGenreClick(genreName) {
+        console.log("Navigasi ke kategori:", genreName);
+      }
+
+      // Event Listener
+      if (searchForm) {
+        searchForm.addEventListener("submit", handleSearch);
+      }
+
+      genreCards.forEach((card) => {
+        card.addEventListener("click", function () {
+          const genreName = this.querySelector(".genre-name").innerText;
+          handleGenreClick(genreName);
+        });
+      });
+    </script>
   </body>
 </html>

@@ -290,15 +290,21 @@
               <a class="nav-link active" href="tvshows.html">TV Shows</a>
             </li>
             <li class="nav-item">
+              <a class="nav-link" href="kdrama.html">K-Drama</a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link" href="genres.html">Genres</a>
             </li>
           </ul>
           <div class="d-flex align-items-center gap-3 mt-3 mt-lg-0">
-            <input
-              type="text"
-              class="nav-search d-none d-lg-block"
-              placeholder="Search shows..."
-            />
+            <form id="searchForm" class="d-flex m-0">
+              <input
+                id="searchInput"
+                type="text"
+                class="nav-search d-none d-lg-block"
+                placeholder="Search shows..."
+              />
+            </form>
             <div class="nav-avatar">U</div>
           </div>
         </div>
@@ -347,84 +353,91 @@
           year: "2008",
           genre: "crime",
           rating: "9.5",
-          img: "https://images.unsplash.com/photo-1594909122845-11baa439b7bf",
+          img: "assets/images/breaking-bad.jpg",
         },
         {
           title: "Stranger Things",
           year: "2016",
           genre: "horror",
           rating: "8.7",
-          img: "https://images.unsplash.com/photo-1440404653325-ab127d49abc1",
+          img: "assets/images/strangerthings.webp",
         },
         {
           title: "Peaky Blinders",
           year: "2013",
           genre: "drama",
           rating: "8.8",
-          img: "https://images.unsplash.com/photo-1478720568477-152d9b164e26",
+          img: "assets/images/peakyblinders.webp",
         },
         {
           title: "The Witcher",
           year: "2019",
           genre: "fantasy",
           rating: "8.2",
-          img: "https://images.unsplash.com/photo-1581905764498-2c1a3f6c1b62",
+          img: "assets/images/thewitcher.jpg",
         },
         {
           title: "Narcos",
           year: "2015",
           genre: "crime",
           rating: "8.8",
-          img: "https://images.unsplash.com/photo-1601933470928-c9c3c1e3b08f",
+          img: "assets/images/narcos.jpg",
         },
         {
           title: "Lucifer",
           year: "2016",
           genre: "fantasy",
           rating: "8.1",
-          img: "https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead",
+          img: "assets/images/lucifer.jpg",
         },
         {
           title: "You",
           year: "2018",
           genre: "thriller",
           rating: "7.7",
-          img: "https://images.unsplash.com/photo-1626814026160-2237a95fc5a0",
+          img: "assets/images/you.jpg",
         },
         {
           title: "Jessica Jones",
           year: "2015",
           genre: "action",
           rating: "7.9",
-          img: "https://images.unsplash.com/photo-1612036782180-6f0822045d4c",
+          img: "assets/images/jessicajones.jpg",
         },
         {
           title: "The Crown",
           year: "2016",
           genre: "drama",
           rating: "8.7",
-          img: "https://images.unsplash.com/photo-1612197527402-5a54c0a4b8b9",
+          img: "assets/images/thecrown.jpg",
         },
         {
           title: "Squid Game",
           year: "2021",
           genre: "thriller",
           rating: "8.0",
-          img: "https://images.unsplash.com/photo-1509347528160-9a9e33742cdb",
+          img: "assets/images/squidgame.jpg",
         },
         {
           title: "Money Heist",
           year: "2017",
           genre: "crime",
           rating: "8.3",
-          img: "https://images.unsplash.com/photo-1527224857830-43a7acc85260",
+          img: "assets/images/moneyheist.jpg",
         },
         {
           title: "Daredevil",
           year: "2015",
           genre: "action",
           rating: "8.6",
-          img: "https://images.unsplash.com/photo-1608889175123-8ee362201f81",
+          img: "assets/images/daredevil.webp",
+        },
+        {
+          title: "Comic 8",
+          year: "2014",
+          genre: "comedy",
+          rating: "8.0",
+          img: "assets/images/comic8.jpg",
         },
       ];
 
@@ -493,6 +506,33 @@
       });
 
       renderShows(activeGenre);
+
+      // --- Implementasi DOM, Event, Function, dan Form Handling ---
+
+      // DOM = Mengakses HTML
+      const searchForm = document.getElementById("searchForm");
+      const searchInput = document.getElementById("searchInput");
+
+      // Function = Menjalankan perintah
+      function handleShowSearch(event) {
+        // Event = Menangkap aksi user (submit form)
+        event.preventDefault();
+
+        // Form handling = Mengatur input user
+        const keyword = searchInput.value.trim();
+
+        if (keyword === "") {
+          alert("Form kosong! Masukkan judul TV Show untuk mencari.");
+        } else {
+          alert(`Fitur pencarian sedang memproses kata kunci: "${keyword}"`);
+          searchInput.value = ""; // Mengosongkan form setelah submit
+        }
+      }
+
+      // Event Listener
+      if (searchForm) {
+        searchForm.addEventListener("submit", handleShowSearch);
+      }
     </script>
   </body>
 </html>
