@@ -36,8 +36,7 @@
     <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-dark">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">4 Watch</a>
-
+        <a class="navbar-brand" href="index.html">4 Watch</a>
         <button
           class="navbar-toggler border-0"
           type="button"
@@ -46,11 +45,10 @@
         >
           <span class="navbar-toggler-icon"></span>
         </button>
-
         <div class="collapse navbar-collapse" id="mainNav">
           <ul class="navbar-nav mx-auto gap-3">
             <li class="nav-item">
-              <a class="nav-link active" href="#">Home</a>
+              <a class="nav-link active" href="index.html">Home</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="movies.html">Movies</a>
@@ -65,92 +63,161 @@
               <a class="nav-link" href="genres.html">Genres</a>
             </li>
           </ul>
-
           <div class="d-flex align-items-center gap-3 mt-3 mt-lg-0">
-            <input
-              type="text"
-              class="nav-search d-none d-lg-block"
-              placeholder="Search movies..."
-            />
-            <div class="nav-avatar">4</div>
+            <form id="searchForm" class="d-flex m-0">
+              <input
+                id="searchInput"
+                type="text"
+                class="nav-search d-none d-lg-block"
+                placeholder="Search movies..."
+              />
+            </form>
+            <div class="nav-avatar">U</div>
           </div>
         </div>
       </div>
     </nav>
 
     <!-- HERO SECTION -->
-    <section class="hero">
-      <div class="hero-content">
-        <span class="hero-badge fade-in-up">🔥 Trending #1</span>
-        <h1 class="fade-in-up delay-1">THE WITCHER</h1>
+    <div class="hero">
+  <div class="hero-slides">
 
-        <div class="hero-meta fade-in-up delay-2">
-          <span>Season 1</span>
-          <span class="dot"></span>
-          <span class="rating">★★★★☆ 4.5</span>
-          <span class="dot"></span>
-          <span>2019</span>
-          <span class="dot"></span>
+ <!-- Slide 1 -->
+    <div class="hero-slide active">
+      <div class="hero-bg hbg1"></div>
+      <div class="hero-content">
+        <span class="hero-badge">🔥 Trending #1</span>
+        <h1 class="hero-title">THE WITCHER</h1>
+        <div class="hero-meta">
+          <span>Season 1</span><span class="dot"></span>
+          <span class="rating">★★★★☆ 4.5</span><span class="dot"></span>
+          <span>2019</span><span class="dot"></span>
           <span>8 Episodes</span>
         </div>
-
-        <p class="hero-desc fade-in-up delay-2">
-          Geralt of Rivia, a solitary monster hunter, struggles to find his
-          place in a world where people often prove more wicked than beasts.
-        </p>
-
-        <div
-          class="hero-meta fade-in-up delay-2"
-          style="gap: 8px; margin-bottom: 0"
-        >
-          <span
-            style="
-              background: rgba(255, 255, 255, 0.08);
-              padding: 3px 10px;
-              border-radius: 6px;
-              font-size: 0.75rem;
-              color: #d4d4d8;
-            "
-            >Crime</span
-          >
-          <span
-            style="
-              background: rgba(255, 255, 255, 0.08);
-              padding: 3px 10px;
-              border-radius: 6px;
-              font-size: 0.75rem;
-              color: #d4d4d8;
-            "
-            >Drama</span
-          >
-          <span
-            style="
-              background: rgba(255, 255, 255, 0.08);
-              padding: 3px 10px;
-              border-radius: 6px;
-              font-size: 0.75rem;
-              color: #d4d4d8;
-            "
-            >Fantasy</span
-          >
+        <div class="hero-genres">
+          <span class="genre-tag">Crime</span>
+          <span class="genre-tag">Drama</span>
+          <span class="genre-tag">Fantasy</span>
         </div>
-
-        <div class="d-flex gap-2 mt-4 fade-in-up delay-3">
-          <button class="btn btn-play">
-            <i class="fas fa-play"></i> Watch Now
-          </button>
-          <button class="btn btn-add">
-            <i class="fas fa-plus"></i> My List
-          </button>
+        <p class="hero-desc">Geralt of Rivia, a solitary monster hunter, struggles to find his place in a world where people often prove more wicked than beasts.</p>
+        <div class="hero-buttons">
+          <button class="btn btn-play"><i class="fas fa-play"></i> Watch Now</button>
+          <button class="btn btn-add"><i class="fas fa-plus"></i> My List</button>
         </div>
       </div>
-    </section>
+    </div>
+
+    <!-- Slide 2 -->
+    <div class="hero-slide">
+      <div class="hero-bg hbg2"></div>
+      <div class="hero-content">
+        <span class="hero-badge">⭐ Top Pick</span>
+        <h1 class="hero-title">STRANGER THINGS</h1>
+        <div class="hero-meta">
+          <span>Season 4</span><span class="dot"></span>
+          <span class="rating">★★★★★ 4.9</span><span class="dot"></span>
+          <span>2022</span><span class="dot"></span>
+          <span>9 Episodes</span>
+        </div>
+        <div class="hero-genres">
+          <span class="genre-tag">Sci-Fi</span>
+          <span class="genre-tag">Horror</span>
+          <span class="genre-tag">Drama</span>
+        </div>
+        <p class="hero-desc">When a young boy vanishes, a small town uncovers a mystery involving secret experiments, terrifying supernatural forces and one strange little girl.</p>
+        <div class="hero-buttons">
+          <button class="btn btn-play"><i class="fas fa-play"></i> Watch Now</button>
+          <button class="btn btn-add"><i class="fas fa-plus"></i> My List</button>
+        </div>
+      </div>
+    </div>
+
+     <!-- Slide 3 -->
+    <div class="hero-slide">
+      <div class="hero-bg hbg3"></div>
+      <div class="hero-content">
+        <span class="hero-badge">🆕 New Release</span>
+        <h1 class="hero-title">BREAKING BAD</h1>
+        <div class="hero-meta">
+          <span>Season 5</span><span class="dot"></span>
+          <span class="rating">★★★★★ 5.0</span><span class="dot"></span>
+          <span>2013</span><span class="dot"></span>
+          <span>16 Episodes</span>
+        </div>
+        <div class="hero-genres">
+          <span class="genre-tag">Crime</span>
+          <span class="genre-tag">Thriller</span>
+          <span class="genre-tag">Drama</span>
+        </div>
+        <p class="hero-desc">A high school chemistry teacher diagnosed with inoperable lung cancer turns to manufacturing and selling methamphetamine with a former student.</p>
+        <div class="hero-buttons">
+          <button class="btn btn-play"><i class="fas fa-play"></i> Watch Now</button>
+          <button class="btn btn-add"><i class="fas fa-plus"></i> My List</button>
+        </div>
+      </div>
+    </div>
+ 
+  </div>
+
+  <!-- Arrows -->
+  <button class="hero-arrow left" id="prevBtn"><i class="fas fa-chevron-left"></i></button>
+  <button class="hero-arrow right" id="nextBtn"><i class="fas fa-chevron-right"></i></button>
+
+  <!-- Dots -->
+  <div class="hero-dots">
+    <div class="hero-dot active" data-i="0"></div>
+    <div class="hero-dot" data-i="1"></div>
+    <div class="hero-dot" data-i="2"></div>
+  </div>
+</div>
+
+<!-- UP NEXT ROW -->
+<div class="section" style="margin-top: -60px;">
+  <div class="section-header">
+    <span class="section-title">Up Next</span>
+    <a class="section-see-all" href="#">See All</a>
+  </div>
+  <div class="cards-row">
+    <div class="card">
+      <div class="card-thumb"><div class="card-thumb-placeholder c1">THE WITCHER</div><div class="card-overlay"></div><div class="card-play"><i class="fas fa-play"></i></div></div>
+      <div class="card-info"><div class="card-title">The Witcher</div><div class="card-sub">Recently Added</div></div>
+    </div>
+    <div class="card">
+      <div class="card-thumb"><div class="card-thumb-placeholder c2">PLATONIC</div><div class="card-overlay"></div><div class="card-play"><i class="fas fa-play"></i></div></div>
+      <div class="card-info"><div class="card-title">Platonic</div><div class="card-sub">Recently Added</div></div>
+    </div>
+    <div class="card">
+      <div class="card-thumb"><div class="card-thumb-placeholder c3">CROWDED ROOM</div><div class="card-overlay"></div><div class="card-play"><i class="fas fa-play"></i></div></div>
+      <div class="card-info"><div class="card-title">The Crowded Room</div><div class="card-sub">Recently Added</div></div>
+    </div>
+    <div class="card">
+      <div class="card-thumb"><div class="card-thumb-placeholder c4">SWAGGER</div><div class="card-overlay"></div><div class="card-play"><i class="fas fa-play"></i></div></div>
+      <div class="card-info"><div class="card-title">Swagger</div><div class="card-sub">Recently Added</div></div>
+    </div>
+    <div class="card">
+      <div class="card-thumb"><div class="card-thumb-placeholder c5">HIJACK</div><div class="card-overlay"></div><div class="card-play"><i class="fas fa-play"></i></div></div>
+      <div class="card-info"><div class="card-title">Hijack</div><div class="card-sub">Recently Added</div></div>
+    </div>
+    <div class="card">
+      <div class="card-thumb"><div class="card-thumb-placeholder c6">SILO</div><div class="card-overlay"></div><div class="card-play"><i class="fas fa-play"></i></div></div>
+      <div class="card-info"><div class="card-title">Silo</div><div class="card-sub">Recently Added</div></div>
+    </div>
+    <div class="card">
+      <div class="card-thumb"><div class="card-thumb-placeholder c7">SEVERANCE</div><div class="card-overlay"></div><div class="card-play"><i class="fas fa-play"></i></div></div>
+      <div class="card-info"><div class="card-title">Severance</div><div class="card-sub">Recently Added</div></div>
+    </div>
+    <div class="card">
+      <div class="card-thumb"><div class="card-thumb-placeholder c8">TED LASSO</div><div class="card-overlay"></div><div class="card-play"><i class="fas fa-play"></i></div></div>
+      <div class="card-info"><div class="card-title">Ted Lasso</div><div class="card-sub">Recently Added</div></div>
+    </div>
+  </div>
+</div>
 
     <!-- TRENDING NOW -->
     <div class="container mt-5">
       <div class="section-header">
         <h2 class="section-title">🔥 Trending Now</h2>
-        <a href="#" class="see-all"
+        <a href="#" class="section-see-all"
           >See All <i class="fas fa-chevron-right" style="font-size: 0.7rem"></i
         ></a>
       </div>
@@ -231,7 +298,7 @@
     <div class="container mt-5">
       <div class="section-header">
         <h2 class="section-title">⭐ Top Rated</h2>
-        <a href="#" class="see-all"
+        <a href="#" class="section-see-all"
           >See All <i class="fas fa-chevron-right" style="font-size: 0.7rem"></i
         ></a>
       </div>
@@ -369,46 +436,30 @@
     </footer>
 
     <!-- SCRIPTS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-      // DOM = Mengakses HTML
-      const movieCards = document.querySelectorAll(".movie-card");
-      const subscribeInput = document.getElementById("subscribeInput");
-      const subscribeBtn = document.getElementById("subscribeBtn");
-
-      // Function = Menjalankan perintah
-      function handleSubscribe(event) {
-        // Event = Menangkap aksi user
-        event.preventDefault(); // Mencegah form reload atau default button action
-
-        // Form handling = Mengatur input user
-        const emailValue = subscribeInput.value.trim();
-
-        if (emailValue === "") {
-          alert("Silakan masukkan email Anda untuk berlangganan!");
-        } else if (!emailValue.includes("@")) {
-          alert("Format email tidak valid!");
-        } else {
-          alert(`Terima kasih! Email ${emailValue} berhasil didaftarkan.`);
-          subscribeInput.value = ""; // Mengosongkan input form
-        }
-      }
-
-      function handleMovieClick(title) {
-        alert("Memilih film: " + title);
-      }
-
-      // Event = Menambahkan event listener ke elemen
-      if (subscribeBtn) {
-        subscribeBtn.addEventListener("click", handleSubscribe);
-      }
-
-      movieCards.forEach((card) => {
-        card.addEventListener("click", () => {
-          const title = card.querySelector(".movie-title").innerText;
-          handleMovieClick(title);
-        });
-      });
-    </script>
+  const slides = document.querySelectorAll('.hero-slide');
+  const dots   = document.querySelectorAll('.hero-dot');
+  let current  = 0;
+  let timer;
+ 
+  function goTo(n) {
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    current = (n + slides.length) % slides.length;
+    slides[current].classList.add('active');
+    dots[current].classList.add('active');
+  }
+ 
+  function startTimer() {
+    clearInterval(timer);
+    timer = setInterval(() => goTo(current + 1), 5000);
+  }
+ 
+  document.getElementById('nextBtn').addEventListener('click', () => { goTo(current + 1); startTimer(); });
+  document.getElementById('prevBtn').addEventListener('click', () => { goTo(current - 1); startTimer(); });
+  dots.forEach(d => d.addEventListener('click', () => { goTo(+d.dataset.i); startTimer(); }));
+ 
+  startTimer();
+</script>
   </body>
 </html>
