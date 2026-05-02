@@ -60,7 +60,45 @@
                 placeholder="Search shows..."
               />
             </form>
-            <div class="nav-avatar">U</div>
+            <div class="dropdown">
+              <div
+                class="nav-avatar dropdown-toggle"
+                id="profileDropdown"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                U
+              </div>
+              <ul
+                class="dropdown-menu dropdown-menu-end profile-dropdown"
+                aria-labelledby="profileDropdown"
+              >
+                <li class="profile-header">
+                  <div class="nav-avatar large">U</div>
+                  <div class="profile-info">
+                    <span class="profile-name">Ultimate User</span>
+                    <span class="profile-email">user@4watch.com</span>
+                  </div>
+                </li>
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                  <a class="dropdown-item" href="#"
+                    ><i class="fas fa-user-circle me-2"></i> My Profile</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#"
+                    ><i class="fas fa-cog me-2"></i> Settings</a
+                  >
+                </li>
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                  <a class="dropdown-item text-danger" href="login.html"
+                    ><i class="fas fa-sign-out-alt me-2"></i> Sign Out</a
+                  >
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -102,14 +140,12 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+      const grid = document.getElementById("movieGrid");
+      const noResults = document.getElementById("noResults");
+      const pageTitle = document.getElementById("pageTitle");
+      const pageDesc = document.getElementById("pageDesc");
+
       const shows = [
-        {
-          title: "Breaking Bad",
-          year: "2008",
-          genre: "crime",
-          rating: "9.5",
-          img: "assets/images/breaking-bad.jpg",
-        },
         {
           title: "Stranger Things",
           year: "2016",
@@ -118,11 +154,25 @@
           img: "assets/images/strangerthings.webp",
         },
         {
+          title: "Breaking Bad",
+          year: "2008",
+          genre: "crime",
+          rating: "9.5",
+          img: "assets/images/breaking-bad.jpg",
+        },
+        {
           title: "Peaky Blinders",
           year: "2013",
-          genre: "drama",
+          genre: "crime",
           rating: "8.8",
           img: "assets/images/peakyblinders.webp",
+        },
+        {
+          title: "The Crown",
+          year: "2016",
+          genre: "drama",
+          rating: "8.7",
+          img: "assets/images/thecrown.jpg",
         },
         {
           title: "The Witcher",
@@ -153,18 +203,11 @@
           img: "assets/images/you.jpg",
         },
         {
-          title: "Jessica Jones",
-          year: "2015",
-          genre: "action",
-          rating: "7.9",
-          img: "assets/images/jessicajones.jpg",
-        },
-        {
-          title: "The Crown",
-          year: "2016",
-          genre: "drama",
-          rating: "8.7",
-          img: "assets/images/thecrown.jpg",
+          title: "Money Heist",
+          year: "2017",
+          genre: "crime",
+          rating: "8.2",
+          img: "assets/images/moneyheist.jpg",
         },
         {
           title: "Squid Game",
@@ -173,33 +216,7 @@
           rating: "8.0",
           img: "assets/images/squidgame.jpg",
         },
-        {
-          title: "Money Heist",
-          year: "2017",
-          genre: "crime",
-          rating: "8.3",
-          img: "assets/images/moneyheist.jpg",
-        },
-        {
-          title: "Daredevil",
-          year: "2015",
-          genre: "action",
-          rating: "8.6",
-          img: "assets/images/daredevil.webp",
-        },
-        {
-          title: "Comic 8",
-          year: "2014",
-          genre: "comedy",
-          rating: "8.0",
-          img: "assets/images/comic8.jpg",
-        },
       ];
-
-      const grid = document.getElementById("movieGrid");
-      const noResults = document.getElementById("noResults");
-      const pageTitle = document.getElementById("pageTitle");
-      const pageDesc = document.getElementById("pageDesc");
 
       function renderShows(genre) {
         const filtered =
@@ -211,82 +228,45 @@
         }
         noResults.style.display = "none";
         filtered.forEach((m) => {
+          const fallbackImage = `https://via.placeholder.com/500x750/111827/00ffc3?text=${encodeURIComponent(m.title)}`;
+          const genreLabel = m.genre.charAt(0).toUpperCase() + m.genre.slice(1);
           grid.innerHTML += `
-            <div class="movie-card" onclick="alert('${m.title} selected!')">
-              <img src="${m.img}" alt="${m.title}"/>
+            <div class="movie-card" onclick="watchMovie('${m.title}','${m.img}','${genreLabel}','${m.rating}','${m.year}')">
+              <img src="${m.img}" alt="${m.title}" onerror="this.onerror=null; this.src='${fallbackImage}';" />
               <span class="card-rating"><i class="fas fa-star"></i> ${m.rating}</span>
-              <div class="card-overlay"><div class="overlay-play"><i class="fas fa-play"></i></div></div>
+              <div class="card-overlay"></div>
               <div class="movie-info">
-                <div class="movie-title">${m.title}</div>
-                <div class="movie-meta"><span>${m.year}</span><span>•</span><span>${m.genre.charAt(0).toUpperCase() + m.genre.slice(1)}</span></div>
+                <div class="movie-title" title="${m.title}">${m.title}</div>
+                <div class="movie-meta"><span>${m.year}</span><span>•</span><span>${genreLabel}</span></div>
               </div>
             </div>`;
         });
       }
 
-      const params = new URLSearchParams(window.location.search);
-      const urlGenre = params.get("genre");
-      let activeGenre = "all";
-
-      if (urlGenre) {
-        activeGenre = urlGenre.toLowerCase();
-        const label =
-          activeGenre.charAt(0).toUpperCase() + activeGenre.slice(1);
-        pageTitle.textContent = "📺 " + label + " TV Shows";
-        pageDesc.textContent =
-          "Showing all TV shows in the " + label + " genre.";
-      }
-
       document.querySelectorAll(".filter-btn").forEach((btn) => {
-        btn.classList.remove("active");
-        if (btn.dataset.genre === activeGenre) btn.classList.add("active");
         btn.addEventListener("click", () => {
           document
             .querySelectorAll(".filter-btn")
             .forEach((b) => b.classList.remove("active"));
           btn.classList.add("active");
           const g = btn.dataset.genre;
-          renderShows(g);
           if (g === "all") {
             pageTitle.textContent = "📺 TV Shows";
-            pageDesc.textContent =
-              "Explore our full collection of TV Shows — from binge-worthy series to trending episodes.";
+            pageDesc.textContent = "Stream the best TV shows, dramas, and series.";
           } else {
             const l = g.charAt(0).toUpperCase() + g.slice(1);
             pageTitle.textContent = "📺 " + l + " TV Shows";
-            pageDesc.textContent =
-              "Showing all TV shows in the " + l + " genre.";
+            pageDesc.textContent = "Showing TV shows in the " + l + " genre.";
           }
+          renderShows(g);
         });
       });
 
-      renderShows(activeGenre);
+      renderShows("all");
 
-      // --- Implementasi DOM, Event, Function, dan Form Handling ---
-
-      // DOM = Mengakses HTML
-      const searchForm = document.getElementById("searchForm");
-      const searchInput = document.getElementById("searchInput");
-
-      // Function = Menjalankan perintah
-      function handleShowSearch(event) {
-        // Event = Menangkap aksi user (submit form)
-        event.preventDefault();
-
-        // Form handling = Mengatur input user
-        const keyword = searchInput.value.trim();
-
-        if (keyword === "") {
-          alert("Form kosong! Masukkan judul TV Show untuk mencari.");
-        } else {
-          alert(`Fitur pencarian sedang memproses kata kunci: "${keyword}"`);
-          searchInput.value = ""; // Mengosongkan form setelah submit
-        }
-      }
-
-      // Event Listener
-      if (searchForm) {
-        searchForm.addEventListener("submit", handleShowSearch);
+      function watchMovie(title, img, genre, rating, year) {
+        const q = `title=${encodeURIComponent(title)}&img=${encodeURIComponent(img)}&genre=${encodeURIComponent(genre)}&rating=${encodeURIComponent(rating)}&year=${encodeURIComponent(year)}&from=tvshows.html`;
+        window.location.href = `nonton.html?${q}`;
       }
     </script>
   </body>

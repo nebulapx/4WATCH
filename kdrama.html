@@ -204,16 +204,15 @@
         }
         noResults.style.display = "none";
         filtered.forEach((m) => {
-          // Adding fallback image just in case local assets aren't downloaded yet
-          const fallbackImage = `https://via.placeholder.com/500x750/111827/00ffc3?text=${encodeURIComponent(m.title)}`;
+          const genreLabel = m.genre.charAt(0).toUpperCase() + m.genre.slice(1);
           grid.innerHTML += `
-            <div class="movie-card" onclick="alert('${m.title} selected!')">
-              <img src="${m.img}" alt="${m.title}" onerror="this.onerror=null; this.src='${fallbackImage}';" />
+            <div class="movie-card" onclick="watchMovie('${m.title.replace(/'/g, "\\'")}','${m.img}','${genreLabel}','${m.rating}','${m.year}')">
+              <img src="${m.img}" alt="${m.title}"/>
               <span class="card-rating"><i class="fas fa-star"></i> ${m.rating}</span>
               <div class="card-overlay"><div class="overlay-play"><i class="fas fa-play"></i></div></div>
               <div class="movie-info">
                 <div class="movie-title" title="${m.title}">${m.title}</div>
-                <div class="movie-meta"><span>${m.year}</span><span>•</span><span>${m.genre.charAt(0).toUpperCase() + m.genre.slice(1)}</span></div>
+                <div class="movie-meta"><span>${m.year}</span><span>•</span><span>${genreLabel}</span></div>
               </div>
             </div>`;
         });
@@ -256,6 +255,11 @@
       });
 
       renderShows(activeGenre);
+
+      function watchMovie(title, img, genre, rating, year) {
+        const q = `title=${encodeURIComponent(title)}&img=${encodeURIComponent(img)}&genre=${encodeURIComponent(genre)}&rating=${encodeURIComponent(rating)}&year=${encodeURIComponent(year)}&from=kdrama.html`;
+        window.location.href = `nonton.html?${q}`;
+      }
 
       // --- Implementasi DOM, Event, Function, dan Form Handling ---
 

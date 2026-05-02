@@ -1,0 +1,865 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Watch — 4 Watch</title>
+    <meta name="description" content="Watch movies and TV shows on 4 Watch." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="style/style.css" />
+    <style>
+      /* ── WATCH PAGE ── */
+      .watch-page {
+        background: #000;
+        min-height: 100vh;
+      }
+
+      /* Video Player */
+      .player-wrap {
+        position: relative;
+        width: 100%;
+        background: #000;
+        aspect-ratio: 16/9;
+        max-height: 78vh;
+        overflow: hidden;
+      }
+      .player-wrap video,
+      .player-placeholder {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      .player-placeholder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 16px;
+        color: rgba(255, 255, 255, 0.3);
+        font-size: 1rem;
+        position: relative;
+        aspect-ratio: 16/9;
+        max-height: 78vh;
+      }
+      .player-placeholder-bg {
+        position: absolute;
+        inset: 0;
+        background-size: cover;
+        background-position: center;
+        filter: brightness(0.25) blur(6px);
+      }
+      .player-placeholder-icon {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+      }
+      .player-placeholder-icon i {
+        font-size: 4rem;
+        color: var(--accent);
+        opacity: 0.9;
+      }
+      .player-placeholder-icon p {
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 0.9rem;
+      }
+
+      /* Custom Controls overlay */
+      .player-controls {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 40px 24px 18px;
+        background: linear-gradient(
+          to top,
+          rgba(0, 0, 0, 0.85) 0%,
+          transparent 100%
+        );
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        z-index: 10;
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+      .player-wrap:hover .player-controls {
+        opacity: 1;
+      }
+
+      .ctrl-btn {
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 1.2rem;
+        cursor: pointer;
+        padding: 6px 10px;
+        border-radius: 6px;
+        transition: background 0.2s;
+      }
+      .ctrl-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .progress-bar-wrap {
+        flex: 1;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 4px;
+        cursor: pointer;
+        position: relative;
+      }
+      .progress-bar-fill {
+        height: 100%;
+        width: 0%;
+        background: var(--accent);
+        border-radius: 4px;
+        transition: width 0.3s;
+      }
+
+      .time-label {
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.7);
+        min-width: 80px;
+      }
+
+      .volume-wrap {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .volume-slider {
+        width: 72px;
+        height: 4px;
+        accent-color: var(--accent);
+        cursor: pointer;
+      }
+
+      /* Info Section */
+      .info-section {
+        padding: 28px 0 0;
+        background: var(--bg);
+      }
+      .movie-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(0, 255, 195, 0.1);
+        color: var(--accent);
+        border: 1px solid rgba(0, 255, 195, 0.2);
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        padding: 4px 10px;
+        border-radius: 4px;
+        margin-bottom: 12px;
+      }
+      .movie-main-title {
+        font-size: clamp(1.6rem, 4vw, 2.8rem);
+        font-weight: 800;
+        line-height: 1.1;
+        margin-bottom: 12px;
+        color: #fff;
+      }
+      .movie-meta-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        font-size: 0.82rem;
+        color: rgba(255, 255, 255, 0.6);
+        margin-bottom: 14px;
+      }
+      .meta-badge {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        padding: 3px 10px;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        color: #d1d5db;
+      }
+      .meta-rating {
+        color: #f4c430;
+        font-weight: 700;
+        font-size: 0.85rem;
+      }
+      .movie-desc {
+        color: rgba(255, 255, 255, 0.65);
+        font-size: 0.9rem;
+        line-height: 1.7;
+        max-width: 680px;
+        margin-bottom: 22px;
+      }
+      .action-row {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 32px;
+      }
+      .btn-watch {
+        background: var(--accent);
+        color: #0b0f1a;
+        border: none;
+        padding: 12px 28px;
+        border-radius: 8px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.2s;
+      }
+      .btn-watch:hover {
+        background: rgba(0, 255, 195, 0.85);
+        transform: scale(1.02);
+      }
+
+      .btn-list {
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.2s;
+      }
+      .btn-list:hover {
+        background: rgba(255, 255, 255, 0.18);
+      }
+
+      /* Genres tags */
+      .genres-row {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-bottom: 30px;
+      }
+      .genre-pill {
+        background: rgba(255, 255, 255, 0.07);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 5px 14px;
+        border-radius: 20px;
+        font-size: 0.78rem;
+        color: #a1a1aa;
+        transition: all 0.2s;
+        cursor: pointer;
+        text-decoration: none;
+      }
+      .genre-pill:hover {
+        background: var(--accent);
+        color: #0b0f1a;
+        border-color: var(--accent);
+      }
+
+      /* Divider */
+      .section-divider {
+        border: none;
+        border-top: 1px solid rgba(255, 255, 255, 0.07);
+        margin: 24px 0;
+      }
+
+      /* More Like This */
+      .more-section {
+        padding-bottom: 60px;
+      }
+      .more-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin-bottom: 18px;
+        color: #fff;
+      }
+
+      /* Back button in navbar area */
+      .watch-nav {
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        padding: 0.6rem 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+      }
+      .back-link {
+        color: rgba(255, 255, 255, 0.7);
+        text-decoration: none;
+        font-size: 0.85rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: color 0.2s;
+      }
+      .back-link:hover {
+        color: var(--accent);
+      }
+      .watch-brand {
+        color: var(--accent);
+        font-weight: 800;
+        font-size: 1.2rem;
+        letter-spacing: 2px;
+        text-decoration: none;
+      }
+
+      /* Not Found */
+      .not-found {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 60vh;
+        gap: 16px;
+        color: rgba(255, 255, 255, 0.3);
+        text-align: center;
+      }
+      .not-found i {
+        font-size: 4rem;
+        margin-bottom: 8px;
+      }
+      .not-found h2 {
+        color: #fff;
+        font-size: 1.5rem;
+      }
+
+      @media (max-width: 768px) {
+        .player-controls {
+          padding: 20px 12px 12px;
+          gap: 8px;
+        }
+        .volume-wrap {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body class="watch-page">
+    <!-- Navbar -->
+    <nav class="watch-nav">
+      <a class="back-link" id="backLink" href="index.html">
+        <i class="fas fa-arrow-left"></i> <span id="backLabel">Back</span>
+      </a>
+      <a class="watch-brand" href="index.html">4 Watch</a>
+      <div style="width: 80px"></div>
+    </nav>
+
+    <!-- Main Content -->
+    <div id="mainContent">
+      <!-- Player -->
+      <div class="player-wrap" id="playerWrap">
+        <div class="player-placeholder" id="playerPlaceholder">
+          <div class="player-placeholder-bg" id="placeholderBg"></div>
+          <div class="player-placeholder-icon">
+            <i class="fas fa-play-circle"></i>
+            <p>Video player simulation</p>
+          </div>
+        </div>
+        <!-- Controls -->
+        <div class="player-controls">
+          <button class="ctrl-btn" id="playPauseBtn" title="Play/Pause">
+            <i class="fas fa-play"></i>
+          </button>
+          <button class="ctrl-btn" title="Skip Back">
+            <i class="fas fa-backward-step"></i>
+          </button>
+          <button class="ctrl-btn" title="Skip Forward">
+            <i class="fas fa-forward-step"></i>
+          </button>
+          <div class="volume-wrap">
+            <i
+              class="fas fa-volume-up"
+              style="color: #fff; font-size: 0.9rem"
+            ></i>
+            <input
+              type="range"
+              class="volume-slider"
+              min="0"
+              max="100"
+              value="80"
+            />
+          </div>
+          <div class="progress-bar-wrap" id="progressWrap">
+            <div class="progress-bar-fill" id="progressFill"></div>
+          </div>
+          <span class="time-label" id="timeLabel">0:00 / 0:00</span>
+          <button class="ctrl-btn" title="Subtitles">
+            <i class="fas fa-closed-captioning"></i>
+          </button>
+          <button class="ctrl-btn" id="fullscreenBtn" title="Fullscreen">
+            <i class="fas fa-expand"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Info -->
+      <div class="info-section">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-8">
+              <div class="movie-badge" id="infoBadge">🎬 Now Playing</div>
+              <h1 class="movie-main-title" id="infoTitle">Loading...</h1>
+              <div class="movie-meta-row" id="infoMeta"></div>
+              <p class="movie-desc" id="infoDesc">Loading description...</p>
+              <div class="action-row">
+                <button class="btn-watch" id="playBtn">
+                  <i class="fas fa-play"></i> Play
+                </button>
+                <button class="btn-list">
+                  <i class="fas fa-plus"></i> My List
+                </button>
+                <button class="btn-list">
+                  <i class="fas fa-share-alt"></i> Share
+                </button>
+              </div>
+              <div class="genres-row" id="infoGenres"></div>
+            </div>
+          </div>
+          <hr class="section-divider" />
+          <div class="more-section">
+            <div class="more-title">More Like This</div>
+            <div class="scroll-row" id="moreLikeThis"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Not Found (hidden by default) -->
+    <div class="not-found" id="notFound" style="display: none">
+      <i class="fas fa-film"></i>
+      <h2>Content Not Found</h2>
+      <p>We couldn't find the content you're looking for.</p>
+      <a
+        href="index.html"
+        class="btn-watch"
+        style="margin-top: 16px; text-decoration: none"
+        >Go Home</a
+      >
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // ── MASTER CATALOGUE ──────────────────────────────────────────
+      const catalogue = [
+        {
+          title: "Daredevil",
+          year: "2015",
+          genre: "Action • Crime",
+          rating: "8.6",
+          img: "assets/images/daredevil.webp",
+          desc: "Matt Murdock, a blind lawyer, fights crime in New York City as the masked vigilante Daredevil.",
+        },
+        {
+          title: "The Witcher",
+          year: "2019",
+          genre: "Fantasy • Drama",
+          rating: "8.2",
+          img: "assets/images/thewitcher.jpg",
+          desc: "Geralt of Rivia, a solitary monster hunter, struggles to find his place in a world where people often prove more wicked than beasts.",
+        },
+        {
+          title: "Narcos",
+          year: "2015",
+          genre: "Crime • Drama",
+          rating: "8.8",
+          img: "assets/images/narcos.jpg",
+          desc: "The true-life story of the growth and spread of cocaine drug cartels across the globe.",
+        },
+        {
+          title: "Jessica Jones",
+          year: "2015",
+          genre: "Action • Thriller",
+          rating: "7.9",
+          img: "assets/images/jessicajones.jpg",
+          desc: "A former superhero with PTSD opens a detective agency in New York City.",
+        },
+        {
+          title: "Lucifer",
+          year: "2016",
+          genre: "Fantasy • Comedy",
+          rating: "8.1",
+          img: "assets/images/lucifer.jpg",
+          desc: "Lucifer Morningstar, the Devil himself, abandons Hell and runs a nightclub in Los Angeles.",
+        },
+        {
+          title: "You",
+          year: "2018",
+          genre: "Thriller • Drama",
+          rating: "7.7",
+          img: "assets/images/you.jpg",
+          desc: "A charming and brilliant bookstore manager who uses social media and technology to pursue romantic obsessions.",
+        },
+        {
+          title: "The Crown",
+          year: "2016",
+          genre: "Biography • History",
+          rating: "8.7",
+          img: "assets/images/thecrown.jpg",
+          desc: "Follows the political rivalries and romance of Queen Elizabeth II's reign and the events that shaped the second half of the twentieth century.",
+        },
+        {
+          title: "Inception",
+          year: "2010",
+          genre: "Sci-Fi • Thriller",
+          rating: "9.3",
+          img: "assets/images/inception.webp",
+          desc: "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.",
+        },
+        {
+          title: "Breaking Bad",
+          year: "2008",
+          genre: "Crime • Thriller",
+          rating: "9.5",
+          img: "assets/images/breaking-bad.jpg",
+          desc: "A high school chemistry teacher diagnosed with inoperable lung cancer turns to manufacturing and selling methamphetamine.",
+        },
+        {
+          title: "Interstellar",
+          year: "2014",
+          genre: "Sci-Fi • Adventure",
+          rating: "9.1",
+          img: "assets/images/interstellar.jpg",
+          desc: "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.",
+        },
+        {
+          title: "The Dark Knight",
+          year: "2008",
+          genre: "Action • Drama",
+          rating: "9.0",
+          img: "assets/images/thedarkknight.jpg",
+          desc: "When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.",
+        },
+        {
+          title: "Stranger Things",
+          year: "2016",
+          genre: "Horror • Sci-Fi",
+          rating: "8.7",
+          img: "assets/images/strangerthings.webp",
+          desc: "When a young boy vanishes, a small town uncovers a mystery involving secret experiments, terrifying supernatural forces and one strange little girl.",
+        },
+        {
+          title: "Peaky Blinders",
+          year: "2013",
+          genre: "Crime • Drama",
+          rating: "8.8",
+          img: "assets/images/peakyblinders.webp",
+          desc: "A gangster family epic set in 1900s England, centering on a gang who sews razor blades in the peaks of their caps.",
+        },
+        {
+          title: "Comic 8",
+          year: "2014",
+          genre: "Comedy • Action",
+          rating: "8.0",
+          img: "assets/images/comic8.jpg",
+          desc: "Eight comedians go undercover to rob a bank while on a comedy mission.",
+        },
+        // K-Drama
+        {
+          title: "Queen of Tears",
+          year: "2024",
+          genre: "Romance",
+          rating: "9.0",
+          img: "assets/images/queen-of-tears.jpg",
+          desc: "A couple on the brink of divorce gets a second chance at love when unexpected events bring them closer.",
+        },
+        {
+          title: "Moving",
+          year: "2023",
+          genre: "Action",
+          rating: "8.9",
+          img: "assets/images/moving.jpg",
+          desc: "Children with special abilities struggle to hide their powers while their parents confront their own pasts.",
+        },
+        {
+          title: "The Glory",
+          year: "2022",
+          genre: "Thriller",
+          rating: "8.8",
+          img: "assets/images/the-glory.jpg",
+          desc: "A woman who was brutally bullied in school meticulously plans her revenge against her tormentors.",
+        },
+        {
+          title: "Crash Landing on You",
+          year: "2019",
+          genre: "Romance",
+          rating: "8.7",
+          img: "assets/images/cloy.jpg",
+          desc: "A paragliding accident brings a South Korean heiress to North Korea, where she falls in love with a soldier.",
+        },
+        {
+          title: "Vincenzo",
+          year: "2021",
+          genre: "Action",
+          rating: "8.4",
+          img: "assets/images/vincenzo.jpg",
+          desc: "A Korean-Italian mafia lawyer returns to Korea and joins forces with a lawyer to take down villains.",
+        },
+        {
+          title: "Goblin",
+          year: "2016",
+          genre: "Fantasy",
+          rating: "8.6",
+          img: "assets/images/goblin.jpg",
+          desc: "A goblin enlisted as a soldier in the Goryeo dynasty is cursed to immortality and seeks his human bride.",
+        },
+        {
+          title: "Squid Game",
+          year: "2021",
+          genre: "Thriller",
+          rating: "8.0",
+          img: "assets/images/squidgame.jpg",
+          desc: "Hundreds of cash-strapped players accept a strange invitation to compete in children's games. Inside: a deadly twist.",
+        },
+        {
+          title: "Reply 1988",
+          year: "2015",
+          genre: "Comedy",
+          rating: "9.1",
+          img: "assets/images/reply-1988.jpg",
+          desc: "The story of five friends and their families living in the same neighborhood in Seoul in 1988.",
+        },
+        {
+          title: "Hospital Playlist",
+          year: "2020",
+          genre: "Drama",
+          rating: "8.9",
+          img: "assets/images/hospital-playlist.jpg",
+          desc: "Five doctors who have been friends since medical school navigate their professional and personal lives.",
+        },
+        {
+          title: "Alchemy of Souls",
+          year: "2022",
+          genre: "Fantasy",
+          rating: "8.8",
+          img: "assets/images/alchemy-of-souls.jpg",
+          desc: "A powerful sorceress trapped in a blind girl's body meets a mage destined for greatness.",
+        },
+        {
+          title: "My Name",
+          year: "2021",
+          genre: "Action",
+          rating: "7.8",
+          img: "assets/images/my-name.jpg",
+          desc: "After her father is murdered, a woman joins a crime organization and goes undercover in the police force.",
+        },
+        {
+          title: "Business Proposal",
+          year: "2022",
+          genre: "Comedy",
+          rating: "8.1",
+          img: "assets/images/business-proposal.jpg",
+          desc: "A woman goes on a blind date in place of her friend, only to find out her date is her boss.",
+        },
+      ];
+
+      // ── READ URL PARAMS ───────────────────────────────────────────
+      const params = new URLSearchParams(window.location.search);
+      const titleParam = decodeURIComponent(params.get("title") || "");
+      const imgParam = decodeURIComponent(params.get("img") || "");
+      const genreParam = decodeURIComponent(params.get("genre") || "");
+      const ratingParam = decodeURIComponent(params.get("rating") || "");
+      const yearParam = decodeURIComponent(params.get("year") || "");
+      const fromPage = decodeURIComponent(params.get("from") || "index.html");
+
+      // Back link
+      document.getElementById("backLink").href = fromPage;
+      const fromLabel = {
+        "index.html": "Home",
+        "movies.html": "Movies",
+        "tvshows.html": "TV Shows",
+        "kdrama.html": "K-Drama",
+        "genres.html": "Genres",
+      };
+      document.getElementById("backLabel").textContent =
+        fromLabel[fromPage] || "Back";
+
+      // ── FIND IN CATALOGUE ─────────────────────────────────────────
+      let movie = catalogue.find(
+        (m) => m.title.toLowerCase() === titleParam.toLowerCase(),
+      );
+      if (!movie && titleParam) {
+        // Build from URL params if not in catalogue
+        movie = {
+          title: titleParam,
+          img: imgParam,
+          genre: genreParam,
+          rating: ratingParam,
+          year: yearParam,
+          desc: `Watch ${titleParam} on 4 Watch.`,
+        };
+      }
+
+      if (!movie || !movie.title) {
+        document.getElementById("mainContent").style.display = "none";
+        document.getElementById("notFound").style.display = "flex";
+      } else {
+        // Update page title
+        document.title = `${movie.title} — 4 Watch`;
+
+        // Placeholder background
+        if (movie.img) {
+          document.getElementById("placeholderBg").style.backgroundImage =
+            `url('${movie.img}')`;
+        }
+
+        // Badge
+        const ratingNum = parseFloat(movie.rating);
+        let badge = "🎬 Now Playing";
+        if (ratingNum >= 9) badge = "⭐ Top Rated";
+        else if (ratingNum >= 8.5) badge = "🔥 Highly Rated";
+        document.getElementById("infoBadge").textContent = badge;
+
+        // Title
+        document.getElementById("infoTitle").textContent = movie.title;
+
+        // Meta
+        const metaRow = document.getElementById("infoMeta");
+        const metas = [];
+        if (movie.year)
+          metas.push(`<span class="meta-badge">${movie.year}</span>`);
+        if (movie.rating)
+          metas.push(
+            `<span class="meta-rating"><i class="fas fa-star" style="font-size:0.8rem"></i> ${movie.rating}</span>`,
+          );
+        if (movie.genre)
+          metas.push(
+            `<span style="color:rgba(255,255,255,0.5)">${movie.genre}</span>`,
+          );
+        metaRow.innerHTML = metas.join("");
+
+        // Desc
+        document.getElementById("infoDesc").textContent = movie.desc;
+
+        // Genre pills
+        const genresEl = document.getElementById("infoGenres");
+        const genres = (movie.genre || "")
+          .split(/[•,]/)
+          .map((g) => g.trim())
+          .filter(Boolean);
+        genresEl.innerHTML = genres
+          .map(
+            (g) =>
+              `<a href="movies.html?genre=${encodeURIComponent(g.toLowerCase())}" class="genre-pill">${g}</a>`,
+          )
+          .join("");
+
+        // More Like This — same genre, exclude current
+        const genreKey = (movie.genre || "").toLowerCase();
+        const related = catalogue
+          .filter(
+            (m) =>
+              m.title !== movie.title &&
+              m.genre
+                .toLowerCase()
+                .split(/[•,]/)
+                .some((g) => genreKey.includes(g.trim())),
+          )
+          .slice(0, 8);
+        const moreEl = document.getElementById("moreLikeThis");
+        if (related.length) {
+          moreEl.innerHTML = related
+            .map(
+              (m) => `
+            <div class="movie-card" onclick="goToWatch('${encodeURIComponent(m.title)}','${encodeURIComponent(m.img)}','${encodeURIComponent(m.genre)}','${m.rating}','${m.year}')">
+              <img src="${m.img}" alt="${m.title}" onerror="this.style.display='none'"/>
+              <span class="card-rating"><i class="fas fa-star"></i> ${m.rating}</span>
+              <div class="card-overlay"></div>
+              <div class="movie-info">
+                <div class="movie-title">${m.title}</div>
+                <div class="movie-genre">${m.genre}</div>
+              </div>
+            </div>`,
+            )
+            .join("");
+        } else {
+          moreEl.innerHTML =
+            '<p style="color:rgba(255,255,255,0.3);font-size:0.85rem;">No related titles found.</p>';
+        }
+      }
+
+      // ── PLAYER SIMULATION ─────────────────────────────────────────
+      let playing = false;
+      let progressVal = 0;
+      let intervalId;
+
+      document.getElementById("playBtn").addEventListener("click", togglePlay);
+      document
+        .getElementById("playPauseBtn")
+        .addEventListener("click", togglePlay);
+      document.getElementById("fullscreenBtn").addEventListener("click", () => {
+        const wrap = document.getElementById("playerWrap");
+        if (!document.fullscreenElement)
+          wrap.requestFullscreen().catch(() => {});
+        else document.exitFullscreen();
+      });
+
+      function togglePlay() {
+        playing = !playing;
+        const icon = playing ? "fa-pause" : "fa-play";
+        document.getElementById("playPauseBtn").innerHTML =
+          `<i class="fas ${icon}"></i>`;
+        document.getElementById("playBtn").innerHTML =
+          `<i class="fas ${icon}"></i> ${playing ? "Pause" : "Play"}`;
+        if (playing) {
+          intervalId = setInterval(() => {
+            progressVal = Math.min(progressVal + 0.1, 100);
+            document.getElementById("progressFill").style.width =
+              progressVal + "%";
+            const total = 7200; // 2hr in seconds
+            const current = Math.floor((total * progressVal) / 100);
+            document.getElementById("timeLabel").textContent =
+              `${fmtTime(current)} / ${fmtTime(total)}`;
+            if (progressVal >= 100) clearInterval(intervalId);
+          }, 500);
+        } else {
+          clearInterval(intervalId);
+        }
+      }
+
+      function fmtTime(s) {
+        const h = Math.floor(s / 3600),
+          m = Math.floor((s % 3600) / 60),
+          sec = s % 60;
+        return h > 0
+          ? `${h}:${String(m).padStart(2, "0")}:${String(sec).padStart(2, "0")}`
+          : `${m}:${String(sec).padStart(2, "0")}`;
+      }
+
+      document.getElementById("progressWrap").addEventListener("click", (e) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        progressVal = ((e.clientX - rect.left) / rect.width) * 100;
+        document.getElementById("progressFill").style.width = progressVal + "%";
+      });
+
+      // ── NAVIGATE ──────────────────────────────────────────────────
+      function goToWatch(title, img, genre, rating, year) {
+        const from = encodeURIComponent(
+          window.location.pathname.split("/").pop() || "nonton.html",
+        );
+        window.location.href = `nonton.html?title=${title}&img=${img}&genre=${genre}&rating=${rating}&year=${year}&from=${from}`;
+      }
+    </script>
+  </body>
+</html>
